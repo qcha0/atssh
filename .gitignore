@@ -1,0 +1,13 @@
+*.py[cod]
+*$py.class
+env/
+
+# IDE settings
+.idea/
+
+# VS code
+.vscode/
+
+# VirtualEnv
+venv/
+
