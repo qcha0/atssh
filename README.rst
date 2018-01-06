@@ -6,10 +6,16 @@ atssh
 
 .. code-block:: bash
 
+    # 安装
+    bash build.sh ~/.zshrc
+
+    # 用法
+    atssh IP USERNAME PASSWORD PORT
+
     # 第一次连接
-    python atssh.py 192.168.1.99 root root 22
+    atssh 192.168.1.99 root root 22
 
     # 再次连接
-    python atssh.py 192.168.1.99
+    atssh 192.168.1.99
 
 目前只是初版，有待完善...
