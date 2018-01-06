@@ -3,6 +3,8 @@
 env/
 .DS_Store
 
+.python-version
+
 # IDE settings
 .idea/
 
