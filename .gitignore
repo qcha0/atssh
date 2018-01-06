@@ -1,6 +1,7 @@
 *.py[cod]
 *$py.class
 env/
+.DS_Store
 
 # IDE settings
 .idea/
