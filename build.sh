@@ -20,3 +20,15 @@ export PATH=$ATSSH_ROOT/bin:$PATH
 cp -f atssh $ATSSH_ROOT/bin
 cp -f atssh.py $ATSSH_ROOT/bin
 chmod +x $ATSSH_ROOT/bin/atssh
+
+#####################################
+cat > remove.sh <<EOF
+#!/usr/bin/env bash
+
+sed -ie '/export ATSSH_ROOT=.*/d' $1
+sed -ie '/export PATH=\$ATSSH_ROOT\/bin:\$PATH/d' $1
+
+rm -rf $ATSSH_ROOT
+rm -f remove.sh
+EOF
+chmod +x remove.sh
