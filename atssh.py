@@ -105,10 +105,10 @@ if __name__ == '__main__':
     elif argv_len > 3:
         username = sys.argv[2]
         password = sys.argv[3]
-        port = 22
+        port = '22'
     else:
         username = None
         password = None
-        port = 22
+        port = '22'
     atssh = ATSSH()
     atssh.run(ip, username, password, port)
