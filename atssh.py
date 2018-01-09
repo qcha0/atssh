@@ -1,6 +1,7 @@
 # coding: utf-8
 from __future__ import print_function
 import os
+import re
 import sys
 from subprocess import Popen, PIPE
 
@@ -98,6 +99,9 @@ if __name__ == '__main__':
         print('\nPlease input something\n')
         sys.exit(1)
     ip = sys.argv[1]
+    if not re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', ip):
+        print('\nPlease input valid IP')
+        sys.exit(1)
     if argv_len > 4:
         username = sys.argv[2]
         password = sys.argv[3]
