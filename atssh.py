@@ -3,6 +3,8 @@ from __future__ import print_function
 import os
 import re
 import sys
+import socket
+from telnetlib import Telnet
 from subprocess import Popen, PIPE
 
 if sys.version_info.major == 2:
@@ -15,6 +17,16 @@ def getoutput(cmd):
     p = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
     out, _ = p.communicate()
     return out.strip(), p.wait()
+
+
+def test_connect(ip, port, timeout=5):
+    tn = Telnet()
+    try:
+        tn.open(ip, port, timeout=timeout)
+        return True
+    except (socket.timeout, socket.error, socket.gaierror):
+        print('\nCannot connect IP:%s port:%s\n' % (ip, port))
+        return False
 
 
 class ATSSH(object):
@@ -51,6 +63,9 @@ expect {{
             cmd = self.EXPECT_STR.format(**login_info)
             os.system("expect -c '{}'".format(cmd))
         elif username and password:
+            can_connect = test_connect(ip, int(port))
+            if not can_connect:
+                sys.exit(1)
             cmd = self.EXPECT_STR.format(ip=ip,
                                          username=username,
                                          password=password,
