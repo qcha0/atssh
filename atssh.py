@@ -31,7 +31,7 @@ def test_connect(ip, port, timeout=5):
 
 class ATSSH(object):
 
-    EXPECT_STR = """set timeout 30
+    EXPECT_SSH = """set timeout 10
 spawn ssh -o "StrictHostKeyChecking no" -p{port} -l {username} {ip}
 expect {{
     "assword:" {{
@@ -46,6 +46,20 @@ expect {{
         interact
     }}
 }}
+"""
+    EXPECT_SCP = """set timeout 10
+spawn scp -P{port} {src_file} {username}@{ip}:{dest_file}
+expect {{
+    "assword:" {{
+        send "{password}\r"
+    }}
+    "defied" {{
+        puts "Wrong password"
+        exit 1;
+    }}
+}}
+expect eof
+
 """
     
     def __init__(self):
@@ -66,7 +80,7 @@ expect {{
             can_connect = test_connect(ip, int(port))
             if not can_connect:
                 sys.exit(1)
-            cmd = self.EXPECT_STR.format(ip=ip,
+            cmd = self.EXPECT_SSH.format(ip=ip,
                                          username=username,
                                          password=password,
                                          port=port)
