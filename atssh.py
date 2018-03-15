@@ -89,6 +89,12 @@ expect eof
                   'info in the input message\n' % ip)
             sys.exit(1)
 
+    def list_all_ip(self):
+        print('========== All Hosts ==========')
+        for ip in self.config.sections():
+            print('{}:{}'.format(ip, self.config.get(ip, 'port')))
+        print('===============================')
+
     def has_cache(self, ip):
         return self.config.has_section(ip)
 
