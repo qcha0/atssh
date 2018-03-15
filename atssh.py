@@ -5,18 +5,11 @@ import re
 import sys
 import socket
 from telnetlib import Telnet
-from subprocess import Popen, PIPE
 
 if sys.version_info.major == 2:
     from ConfigParser import ConfigParser
 else:
     from configparser import ConfigParser
-
-
-def getoutput(cmd):
-    p = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
-    out, _ = p.communicate()
-    return out.strip(), p.wait()
 
 
 def test_connect(ip, port, timeout=5):
@@ -80,6 +73,7 @@ expect eof
             can_connect = test_connect(ip, int(port))
             if not can_connect:
                 sys.exit(1)
+
             cmd = self.EXPECT_SSH.format(ip=ip,
                                          username=username,
                                          password=password,
@@ -99,11 +93,12 @@ expect eof
         return self.config.has_section(ip)
 
     def query_from_ip(self, ip):
-        return {'ip': ip,
+        return {
+                'ip': ip,
                 'username': self.config.get(ip, 'username'),
                 'password': self.config.get(ip, 'password'),
                 'port': self.config.get(ip, 'port')
-                }
+               }
 
     def record_login_info(self, ip, username, password, port):
         self.config.add_section(ip)
@@ -128,9 +123,11 @@ if __name__ == '__main__':
         print('\nPlease input something\n')
         sys.exit(1)
     ip = sys.argv[1]
+
     if not re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', ip):
         print('\nPlease input valid IP')
         sys.exit(1)
+
     if argv_len > 4:
         username = sys.argv[2]
         password = sys.argv[3]
@@ -143,5 +140,6 @@ if __name__ == '__main__':
         username = None
         password = None
         port = '22'
+
     atssh = ATSSH()
     atssh.run(ip, username, password, port)
