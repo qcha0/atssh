@@ -6,10 +6,10 @@ import sys
 import socket
 from telnetlib import Telnet
 
-if sys.version_info.major == 2:
-    from ConfigParser import ConfigParser
-else:
+if sys.version_info.major > 2:
     from configparser import ConfigParser
+else:
+    from ConfigParser import ConfigParser
 
 
 def test_connect(ip, port, timeout=5):
@@ -95,6 +95,14 @@ expect eof
             print('{}:{}'.format(ip, self.config.get(ip, 'port')))
         print('===============================')
 
+    def remove_ip(self, ip):
+        if self.has_cache(ip):
+            self.config.remove_section(ip)
+            self._write_to_config()
+        else:
+            print('IP not exists in the cache')
+            sys.exit(1)
+
     def has_cache(self, ip):
         return self.config.has_section(ip)
 
@@ -111,6 +119,9 @@ expect eof
         self.config.set(ip, 'username', username)
         self.config.set(ip, 'password', password)
         self.config.set(ip, 'port', port)
+        self._write_to_config()
+
+    def _write_to_config(self):
         with open(self.config_file, 'w') as f:
             self.config.write(f)
 
