@@ -67,7 +67,7 @@ expect eof
     def run(self, ip, username=None, password=None, port=22):
         if self.has_cache(ip):
             login_info = self.query_from_ip(ip)
-            cmd = self.EXPECT_STR.format(**login_info)
+            cmd = self.EXPECT_SSH.format(**login_info)
             os.system("expect -c '{}'".format(cmd))
         elif username and password:
             can_connect = test_connect(ip, int(port))
