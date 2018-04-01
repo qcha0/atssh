@@ -159,4 +159,10 @@ if __name__ == '__main__':
         port = '22'
 
     atssh = ATSSH()
+    if '-h' in sys.argv or '--help' in sys.argv:
+        print('Simple ssh tool for mac:')
+        print('-h --help             print help doc')
+        print('-a --all              print all host')
+        print('-d --delete host-ip   delete cache host info')
+    
     atssh.run(ip, username, password, port)
