@@ -164,5 +164,9 @@ if __name__ == '__main__':
         print('-h --help             print help doc')
         print('-a --all              print all host')
         print('-d --delete host-ip   delete cache host info')
-    
-    atssh.run(ip, username, password, port)
+    if '-a' in sys.argv or '--all' in sys.argv:
+        atssh.list_all_ip()
+    if '-d' in sys.argv or '--delete' in sys.argv:
+        atssh.remove_ip(ip)
+    else:
+        atssh.run(ip, username, password, port)
