@@ -141,23 +141,6 @@ if __name__ == '__main__':
         sys.exit(1)
     ip = sys.argv[1]
 
-    if not re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', ip):
-        print('\nPlease input valid IP')
-        sys.exit(1)
-
-    if argv_len > 4:
-        username = sys.argv[2]
-        password = sys.argv[3]
-        port = sys.argv[4]
-    elif argv_len > 3:
-        username = sys.argv[2]
-        password = sys.argv[3]
-        port = '22'
-    else:
-        username = None
-        password = None
-        port = '22'
-
     atssh = ATSSH()
     if '-h' in sys.argv or '--help' in sys.argv:
         print('Simple ssh tool for mac:')
@@ -169,4 +152,20 @@ if __name__ == '__main__':
     if '-d' in sys.argv or '--delete' in sys.argv:
         atssh.remove_ip(ip)
     else:
+        if not re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', ip):
+            print('\nPlease input valid IP')
+        sys.exit(1)
+
+        if argv_len > 4:
+            username = sys.argv[2]
+            password = sys.argv[3]
+            port = sys.argv[4]
+        elif argv_len > 3:
+            username = sys.argv[2]
+            password = sys.argv[3]
+            port = '22'
+        else:
+            username = None
+            password = None
+            port = '22'
         atssh.run(ip, username, password, port)
