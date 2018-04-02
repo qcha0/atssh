@@ -10,6 +10,7 @@ if sys.version_info.major > 2:
     from configparser import ConfigParser
 else:
     from ConfigParser import ConfigParser
+    input = raw_input
 
 
 def test_connect(ip, port, timeout=5):
