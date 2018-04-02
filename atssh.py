@@ -3,7 +3,6 @@ from __future__ import print_function
 import os
 import re
 import sys
-import socket
 from telnetlib import Telnet
 
 if sys.version_info.major > 2:
@@ -18,7 +17,7 @@ def test_connect(ip, port, timeout=5):
     try:
         tn.open(ip, port, timeout=timeout)
         return True
-    except (socket.timeout, socket.error, socket.gaierror):
+    except:
         print('\nCannot connect IP:%s port:%s\n' % (ip, port))
         return False
 
