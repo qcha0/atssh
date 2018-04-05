@@ -75,6 +75,13 @@ expect {{
             print('\nThe %s has no cache and Cannot find Login'
                   'info in the input message\n' % ip)
             sys.exit(1)
+    
+    @staticmethod
+    def print_help():
+        print('Simple ssh tool for mac:')
+        print('-h --help             print help doc')
+        print('-a --all              print all host')
+        print('-d --delete host-ip   delete cache host info')
 
     def list_all_ip(self):
         print('========== All Hosts ==========')
@@ -123,37 +130,31 @@ expect {{
 
 
 if __name__ == '__main__':
-    argv_len = len(sys.argv)
-    if argv_len < 2:
-        print('\nPlease input something\n')
-        sys.exit(1)
-    ip = sys.argv[1]
-
     atssh = ATSSH()
-    if '-h' in sys.argv or '--help' in sys.argv:
-        print('Simple ssh tool for mac:')
-        print('-h --help             print help doc')
-        print('-a --all              print all host')
-        print('-d --delete host-ip   delete cache host info')
-    if '-a' in sys.argv or '--all' in sys.argv:
+
+    argv_len = len(sys.argv)
+    if argv_len < 2 or '-h' in sys.argv or '--help' in sys.argv:
+        atssh.print_help()
+    elif '-a' in sys.argv or '--all' in sys.argv:
         atssh.list_all_ip()
-    if '-d' in sys.argv or '--delete' in sys.argv:
-        atssh.remove_ip(ip)
     else:
+        ip = sys.argv[1]
         if not re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', ip):
             print('\nPlease input valid IP')
-        sys.exit(1)
-
-        if argv_len > 4:
-            username = sys.argv[2]
-            password = sys.argv[3]
-            port = sys.argv[4]
-        elif argv_len > 3:
-            username = sys.argv[2]
-            password = sys.argv[3]
-            port = '22'
+            sys.exit(1)
+        if '-d' in sys.argv or '--delete' in sys.argv:
+            atssh.remove_ip(ip)
         else:
-            username = None
-            password = None
-            port = '22'
-        atssh.run(ip, username, password, port)
+            if argv_len > 4:
+                username = sys.argv[2]
+                password = sys.argv[3]
+                port = sys.argv[4]
+            elif argv_len > 3:
+                username = sys.argv[2]
+                password = sys.argv[3]
+                port = '22'
+            else:
+                username = None
+                password = None
+                port = '22'
+            atssh.run(ip, username, password, port)
