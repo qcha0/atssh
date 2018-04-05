@@ -12,13 +12,14 @@ else:
     input = raw_input
 
 
-def test_connect(ip, port, timeout=5):
-    tn = Telnet()
+def test_connect(host, port, timeout=5):
+    """测试主机地址及端口是否可用"""
+    client = Telnet()
     try:
-        tn.open(ip, port, timeout=timeout)
+        client.open(host, port, timeout=timeout)
         return True
     except:
-        print('\nCannot connect IP:%s port:%s\n' % (ip, port))
+        print('\nCannot connect IP:%s port:%s\n' % (host, port))
         return False
 
 
@@ -40,21 +41,7 @@ expect {{
     }}
 }}
 """
-    EXPECT_SCP = """set timeout 10
-spawn scp -P{port} {src_file} {username}@{ip}:{dest_file}
-expect {{
-    "assword:" {{
-        send "{password}\r"
-    }}
-    "defied" {{
-        puts "Wrong password"
-        exit 1;
-    }}
-}}
-expect eof
 
-"""
-    
     def __init__(self):
         self.config_file = self._config_file()
         self.config = self.get_config()
@@ -107,14 +94,15 @@ expect eof
         return self.config.has_section(ip)
 
     def query_from_ip(self, ip):
-        return {
-                'ip': ip,
+        return {'ip': ip,
                 'username': self.config.get(ip, 'username'),
                 'password': self.config.get(ip, 'password'),
-                'port': self.config.get(ip, 'port')
-               }
+                'port': self.config.get(ip, 'port')}
 
     def record_login_info(self, ip, username, password, port):
+        """
+        将输入的用户信息录入配置文件中
+        """
         self.config.add_section(ip)
         self.config.set(ip, 'username', username)
         self.config.set(ip, 'password', password)
