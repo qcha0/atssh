@@ -25,7 +25,7 @@ def test_connect(host, port, timeout=5):
 
 class ATSSH(object):
 
-    EXPECT_SSH = """set timeout 10
+    EXPECT_SSH = """set timeout 30
 spawn ssh -o "StrictHostKeyChecking no" -p{port} -l {username} {ip}
 expect {{
     "assword:" {{
