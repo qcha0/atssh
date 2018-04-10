@@ -19,8 +19,14 @@ def test_connect(host, port, timeout=5):
         client.open(host, port, timeout=timeout)
         return True
     except:
-        print('\nCannot connect IP:%s port:%s\n' % (host, port))
+        print('Cannot connect IP:{} port:{}'.format(host, port))
         return False
+
+
+def check_ip(ip):
+    if not re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', ip):
+        print('Please input valid IP')
+        sys.exit(1)
 
 
 class ATSSH(object):
@@ -69,11 +75,11 @@ expect {{
             if retcode == 0:
                 self.record_login_info(ip, username, password, port)
             else:
-                print('\nPlease confirm login username or password\n')
+                print('Please confirm login username or password')
                 sys.exit(1)
         else:
-            print('\nThe %s has no cache and Cannot find Login'
-                  'info in the input message\n' % ip)
+            print('The %s has no cache and Cannot find Login'
+                  'info in the input message' % ip)
             sys.exit(1)
     
     @staticmethod
@@ -93,6 +99,7 @@ expect {{
         if self.has_cache(ip):
             self.config.remove_section(ip)
             self._write_to_config()
+            print('Remove host {} successfully'.format(ip))
         else:
             print('IP not exists in the cache')
             sys.exit(1)
@@ -138,13 +145,13 @@ if __name__ == '__main__':
     elif '-a' in sys.argv or '--all' in sys.argv:
         atssh.list_all_ip()
     else:
-        ip = sys.argv[1]
-        if not re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', ip):
-            print('\nPlease input valid IP')
-            sys.exit(1)
         if '-d' in sys.argv or '--delete' in sys.argv:
+            ip = sys.argv[2]
+            check_ip(ip)
             atssh.remove_ip(ip)
         else:
+            ip = sys.argv[1]
+            check_ip(ip)
             if argv_len > 4:
                 username = sys.argv[2]
                 password = sys.argv[3]
