@@ -18,6 +18,9 @@ $ ./build.sh ~/.zshrc
 ```
 $ atssh -h
 Simple ssh tool for mac:
+
+atssh host [username] [password] [port]
+
 -h --help             print help doc
 -a --all              print all host
 -d --delete host-ip   delete cache host info
