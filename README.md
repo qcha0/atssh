@@ -26,7 +26,7 @@ Simple ssh tool for mac:
 $ atssh 192.168.1.12 root rootpassword 10022
 
 $ atssh -a
-	*************** All Hosts ***************
+    *************** All Hosts ***************
 	Host: 192.168.1.12	Port: 22
     *****************************************
 
