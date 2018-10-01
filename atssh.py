@@ -85,6 +85,7 @@ expect {{
     @staticmethod
     def print_help():
         print('Simple ssh tool for mac:')
+        print('\natssh host [username] [password] [port]\n')
         print('-h --help             print help doc')
         print('-a --all              print all host')
         print('-d --delete host-ip   delete cache host info')
@@ -92,7 +93,7 @@ expect {{
     def list_all_ip(self):
         print('========== All Hosts ==========')
         for ip in self.config.sections():
-            print('{}:{}'.format(ip, self.config.get(ip, 'port')))
+            print('\tHost: {} Port: {}'.format(ip, self.config.get(ip, 'port')))
         print('===============================')
 
     def remove_ip(self, ip):
