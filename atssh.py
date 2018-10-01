@@ -7,9 +7,37 @@ from telnetlib import Telnet
 
 if sys.version_info.major > 2:
     from configparser import ConfigParser
+    from base64 import encodebytes as encry
+    from base64 import decodebytes as decry
+    is_bytes = True
 else:
     from ConfigParser import ConfigParser
+    from base64 import encodestring as encry
+    from base64 import decodestring as decry
+    is_bytes = False
     input = raw_input
+
+
+def encrypt(to_encrypt):
+    result = []
+    num = 0
+    for i in to_encrypt:
+        result.append(chr(ord(i) + num).encode())
+        num += 1
+    if is_bytes:
+        return encry(b''.join(result)).decode()
+    else:
+        return encry(''.join(result))
+
+
+def decrypt(to_decrypt):
+    strings = decry(to_decrypt.encode()).decode() if is_bytes else decry(to_decrypt)
+    result = []
+    num = 0
+    for i in strings:
+        result.append(chr(ord(i) - num))
+        num += 1
+    return ''.join(result)
 
 
 def test_connect(host, port, timeout=5):
