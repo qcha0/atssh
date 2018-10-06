@@ -61,6 +61,14 @@ def check_ip(ip):
         sys.exit(1)
 
 
+def get_config_file():
+    atssh_home = os.getenv('ATSSH_ROOT')
+    if not atssh_home:
+        raise OSError('Cannot load ATSSH_ROOT environ variable')
+    config_file = os.path.join(atssh_home, 'config.ini')
+    return config_file
+
+
 class ATSSH(object):
 
     EXPECT_SSH = """set timeout 30
@@ -81,13 +89,14 @@ expect {{
 """
 
     def __init__(self):
-        self.config_file = self._config_file()
-        self.config = self.get_config()
+        self._config = None
 
-    def get_config(self):
-        config = ConfigParser()
-        config.read(self.config_file)
-        return config
+    @property
+    def config(self):
+        if not self._config:
+            self._config = ConfigParser()
+            self._config.read(get_config_file())
+        return self._config
 
     def run(self, ip, username=None, password=None, port=22):
         if self.has_cache(ip):
@@ -159,14 +168,6 @@ expect {{
     def _write_to_config(self):
         with open(self.config_file, 'w') as f:
             self.config.write(f)
-
-    @staticmethod
-    def _config_file():
-        atssh_home = os.getenv('ATSSH_ROOT')
-        if not atssh_home:
-            raise OSError('Cannot load ATSSH_ROOT environ variable')
-        config_file = os.path.join(atssh_home, 'config.ini')
-        return config_file
 
 
 if __name__ == '__main__':
