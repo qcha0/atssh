@@ -25,12 +25,16 @@ def encrypt(to_encrypt):
         result.append(chr(ord(i) + num).encode())
         num += 1
     if is_bytes:
-        return encry(b''.join(result)).decode()
+        return 'new___' + encry(b''.join(result)).decode().strip()
     else:
-        return encry(''.join(result))
+        return 'new___' + encry(''.join(result)).strip()
 
 
 def decrypt(to_decrypt):
+    # 兼容原本明文保存密码的方式
+    if not to_decrypt.startswith('new___'):
+        return to_decrypt
+    to_decrypt = to_decrypt.lstrip('new___')
     strings = decry(to_decrypt.encode()).decode() if is_bytes else decry(to_decrypt)
     result = []
     num = 0
@@ -139,7 +143,7 @@ expect {{
     def query_from_ip(self, ip):
         return {'ip': ip,
                 'username': self.config.get(ip, 'username'),
-                'password': self.config.get(ip, 'password'),
+                'password': decrypt(self.config.get(ip, 'password')),
                 'port': self.config.get(ip, 'port')}
 
     def record_login_info(self, ip, username, password, port):
@@ -148,7 +152,7 @@ expect {{
         """
         self.config.add_section(ip)
         self.config.set(ip, 'username', username)
-        self.config.set(ip, 'password', password)
+        self.config.set(ip, 'password', encrypt(password))
         self.config.set(ip, 'port', port)
         self._write_to_config()
 
