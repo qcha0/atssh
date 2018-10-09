@@ -90,12 +90,13 @@ expect {{
 
     def __init__(self):
         self._config = None
+        self.config_file = get_config_file()
 
     @property
     def config(self):
         if not self._config:
             self._config = ConfigParser()
-            self._config.read(get_config_file())
+            self._config.read(self.config_file)
         return self._config
 
     def run(self, ip, username=None, password=None, port=22):
