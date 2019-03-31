@@ -3,6 +3,7 @@ from __future__ import print_function
 import os
 import re
 import sys
+import argparse
 from telnetlib import Telnet
 
 if sys.version_info.major > 2:
@@ -126,7 +127,7 @@ expect {{
     
     @staticmethod
     def print_help():
-        print('Simple ssh tool for mac:')
+        print(':')
         print('\natssh host [username] [password] [port]\n')
         print('-h --help             print help doc')
         print('-a --all              print all host')
@@ -169,34 +170,37 @@ expect {{
     def _write_to_config(self):
         with open(self.config_file, 'w') as f:
             self.config.write(f)
+    
+    def action(self):
+        args = parse_arg()
+        if args.all:
+            self.list_all_ip()
+        elif args.delete:
+            self.remove_ip(args.delete)
+        else:
+            self.run(args.host, args.user, args.pwd, args.port)
 
+
+def parse_arg():
+    parser = argparse.ArgumentParser(description='Simple ssh tool for mac')
+    parser.add_argument('host', nargs='?',
+                        help='Destnation host ip address')
+    parser.add_argument('-P', '--port', type=int, default=22,
+                        help='SSH protacol port (defalt 22)')
+    parser.add_argument('-u', '--user',
+                        help='SSH authentication username')
+    parser.add_argument('-p', '--pwd',
+                        help='SSH authentication password')
+    parser.add_argument('-a', '--all',
+                        help='List all host ip addresses')
+    parser.add_argument('-d', '--delete',
+                        help='Delete the specified host record')
+    args = parser.parse_args()
+    if not any((args.host, args.all, args.delete)):
+        sys.exit(1)
+    return args
+    
 
 if __name__ == '__main__':
     atssh = ATSSH()
-
-    argv_len = len(sys.argv)
-    if argv_len < 2 or '-h' in sys.argv or '--help' in sys.argv:
-        atssh.print_help()
-    elif '-a' in sys.argv or '--all' in sys.argv:
-        atssh.list_all_ip()
-    else:
-        if '-d' in sys.argv or '--delete' in sys.argv:
-            ip = sys.argv[2]
-            check_ip(ip)
-            atssh.remove_ip(ip)
-        else:
-            ip = sys.argv[1]
-            check_ip(ip)
-            if argv_len > 4:
-                username = sys.argv[2]
-                password = sys.argv[3]
-                port = sys.argv[4]
-            elif argv_len > 3:
-                username = sys.argv[2]
-                password = sys.argv[3]
-                port = '22'
-            else:
-                username = None
-                password = None
-                port = '22'
-            atssh.run(ip, username, password, port)
+    atssh.action()
