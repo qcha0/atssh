@@ -125,14 +125,6 @@ expect {{
                   'info in the input message' % ip)
             sys.exit(1)
     
-    @staticmethod
-    def print_help():
-        print(':')
-        print('\natssh host [username] [password] [port]\n')
-        print('-h --help             print help doc')
-        print('-a --all              print all host')
-        print('-d --delete host-ip   delete cache host info')
-
     def list_all_ip(self):
         print('========== All Hosts ==========')
         for ip in self.config.sections():
