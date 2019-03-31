@@ -121,8 +121,8 @@ expect {{
                 print('Please confirm login username or password')
                 sys.exit(1)
         else:
-            print('The %s has no cache and Cannot find Login'
-                  'info in the input message' % ip)
+            print('The {} has no cache and Cannot find Login'
+                  'info in the input message'.format(ip))
             sys.exit(1)
     
     def list_all_ip(self):
