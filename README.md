@@ -18,21 +18,29 @@ $ ./build.sh ~/.zshrc
 ---
 ```
 $ atssh -h
-Simple ssh tool for mac:
+usage: atssh.py [-h] [-P PORT] [-u USER] [-p PWD] [-a] [-d DELETE] [host]
 
-atssh host [username] [password] [port]
+Simple ssh tool for mac
 
--h --help             print help doc
--a --all              print all host
--d --delete host-ip   delete cache host info
+positional arguments:
+  host                  Destnation host ip address
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -P PORT, --port PORT  SSH protacol port (defalt 22)
+  -u USER, --user USER  SSH authentication username
+  -p PWD, --pwd PWD     SSH authentication password
+  -a, --all             List all host ip addresses
+  -d DELETE, --delete DELETE
+                        Delete the specified host record
 
 # ssh默认访问端口22，若为其他端口需要指定
 $ atssh 192.168.1.12 root rootpassword 10022
 
 $ atssh -a
-    *************** All Hosts ***************
-	Host: 192.168.1.12	Port: 22
-    *****************************************
+*************** All Hosts ***************
+Host: 192.168.1.12	Port: 22
+*****************************************
 
 $ atssh -d 192.168.1.12
 Remove host 127.0.0.1 successfully
