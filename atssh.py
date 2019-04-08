@@ -10,11 +10,13 @@ if sys.version_info.major > 2:
     from configparser import ConfigParser
     from base64 import encodebytes as encry
     from base64 import decodebytes as decry
+
     is_bytes = True
 else:
     from ConfigParser import ConfigParser
     from base64 import encodestring as encry
     from base64 import decodestring as decry
+
     is_bytes = False
     input = raw_input
 
@@ -36,7 +38,8 @@ def decrypt(to_decrypt):
     if not to_decrypt.startswith('new___'):
         return to_decrypt
     to_decrypt = to_decrypt.lstrip('new___')
-    strings = decry(to_decrypt.encode()).decode() if is_bytes else decry(to_decrypt)
+    strings = decry(to_decrypt.encode()).decode() if is_bytes else decry(
+        to_decrypt)
     result = []
     num = 0
     for i in strings:
@@ -71,7 +74,6 @@ def get_config_file():
 
 
 class ATSSH(object):
-
     EXPECT_SSH = """set timeout 30
 spawn ssh -o "StrictHostKeyChecking no" -p{port} -l {username} {ip}
 expect {{
@@ -124,11 +126,11 @@ expect {{
             print('The {} has no cache and Cannot find Login'
                   'info in the input message'.format(ip))
             sys.exit(1)
-    
+
     def list_all_ip(self):
         print('========== All Hosts ==========')
         for ip in self.config.sections():
-            print('\tHost: {} Port: {}'.format(ip, self.config.get(ip, 'port')))
+            print('Host: {}\tPort: {}'.format(ip, self.config.get(ip, 'port')))
         print('===============================')
 
     def remove_ip(self, ip):
@@ -162,7 +164,7 @@ expect {{
     def _write_to_config(self):
         with open(self.config_file, 'w') as f:
             self.config.write(f)
-    
+
     def action(self):
         args = parse_arg()
         if args.all:
@@ -183,7 +185,7 @@ def parse_arg():
                         help='SSH authentication username')
     parser.add_argument('-p', '--pwd',
                         help='SSH authentication password')
-    parser.add_argument('-a', '--all',
+    parser.add_argument('-a', '--all', action='store_true',
                         help='List all host ip addresses')
     parser.add_argument('-d', '--delete',
                         help='Delete the specified host record')
@@ -191,7 +193,7 @@ def parse_arg():
     if not any((args.host, args.all, args.delete)):
         sys.exit(1)
     return args
-    
+
 
 if __name__ == '__main__':
     atssh = ATSSH()
