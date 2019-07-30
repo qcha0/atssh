@@ -21,12 +21,13 @@ else:
     input = raw_input
 
 
+MAGIC_NUM = 1
+
+
 def encrypt(to_encrypt):
     result = []
-    num = 0
     for i in to_encrypt:
-        result.append(chr(ord(i) + num).encode())
-        num += 1
+        result.append(chr(ord(i) + MAGIC_NUM).encode())
     if is_bytes:
         return 'new___' + encry(b''.join(result)).decode().strip()
     else:
@@ -43,7 +44,7 @@ def decrypt(to_decrypt):
     result = []
     num = 0
     for i in strings:
-        result.append(chr(ord(i) - num))
+        result.append(chr(ord(i) - MAGIC_NUM))
         num += 1
     return ''.join(result)
 
