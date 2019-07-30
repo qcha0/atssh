@@ -35,7 +35,7 @@ optional arguments:
                         Delete the specified host record
 
 # ssh默认访问端口22，若为其他端口需要指定
-$ atssh 192.168.1.12 root rootpassword 10022
+$ atssh -h 192.168.1.12 -u root -p rootpassword -P 10022
 
 $ atssh -a
 *************** All Hosts ***************
@@ -59,6 +59,6 @@ $ ./remove.sh
 待完成
 ---
 
-- [ ] 支持查询密码，查询时需要输入用户口令
 - [ ] 支持通过别名的方式登陆远程主机
-- [ ] 初次登陆时，如果登陆成功需要立马将密码保存
+- [ ] 初次登陆时，如果登陆成功立即将密码保存
+- [ ] 支持scp传输文件
